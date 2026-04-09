@@ -9,4 +9,5 @@ class File(Base):
     filename = Column(String)
     version = Column(Integer)
     filepath = Column(String)
+    student_name = Column(String)   # 👈 ADD THIS
     uploaded_at = Column(DateTime, default=datetime.utcnow)
