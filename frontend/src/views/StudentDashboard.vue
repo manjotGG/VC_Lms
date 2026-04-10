@@ -2,7 +2,7 @@
     <div class="student-dashboard">
         <nav class="navbar">
             <div class="nav-content">
-                <div class="logo">📚 LMS Student</div>
+                <div class="logo">VC LMS Student</div>
                 <button class="btn btn-secondary btn-sm" @click="$emit('logout')">Logout</button>
             </div>
         </nav>
@@ -24,7 +24,7 @@
                             @click="$refs.fileInput.click()"
                             :disabled="uploading"
                         >
-                            📁 Choose File
+                            Choose File
                         </button>
                     </div>
                     
@@ -86,7 +86,7 @@
                                     @click="downloadFile(file.filename)"
                                     :disabled="downloading"
                                 >
-                                    ⬇ Download
+                                    Download
                                 </button>
                             </div>
                         </div>
@@ -155,7 +155,8 @@ export default {
         const downloadFile = async (filename) => {
             downloading.value = true
             try {
-                const blob = await api.downloadLatest(filename)
+                const response = await api.downloadLatest(filename)
+                const blob = response.data || response
                 const url = URL.createObjectURL(blob)
                 const a = document.createElement('a')
                 a.href = url
@@ -195,13 +196,14 @@ export default {
 <style scoped>
 .student-dashboard {
     min-height: 100vh;
+    background: var(--bg-primary);
 }
 
 .navbar {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
     padding: 1.5rem 0;
-    sticky: 0;
+    position: sticky;
     top: 0;
     z-index: 100;
 }
@@ -218,6 +220,7 @@ export default {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
+    color: var(--text-primary);
 }
 
 .container {
@@ -233,15 +236,17 @@ export default {
 h2 {
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
+    color: var(--text-primary);
+    font-weight: 700;
 }
 
 .upload-card {
     background: var(--bg-secondary);
-    border: 2px dashed var(--border-color);
-    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
     padding: 2rem;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease;
 }
 
 .upload-card:hover {
@@ -263,8 +268,9 @@ h2 {
 .file-info p {
     background: var(--bg-tertiary);
     padding: 0.75rem;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     word-break: break-all;
+    color: var(--text-primary);
 }
 
 .file-info input {
@@ -278,6 +284,7 @@ h2 {
 .loading, .empty {
     text-align: center;
     padding: 2rem 0;
+    color: var(--text-secondary);
 }
 
 .files-list {
@@ -289,7 +296,7 @@ h2 {
 .file-item {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     overflow: hidden;
 }
 
@@ -304,15 +311,18 @@ h2 {
 .file-header h3 {
     margin: 0;
     word-break: break-word;
+    color: var(--text-primary);
+    font-weight: 700;
 }
 
 .version-badge {
-    background: var(--accent-color);
-    color: white;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
-    border-radius: 2rem;
+    border-radius: 0.3rem;
     font-size: 0.8rem;
     white-space: nowrap;
+    border: 1px solid var(--border-color);
 }
 
 .versions {
@@ -325,8 +335,9 @@ h2 {
     align-items: flex-start;
     padding: 1rem;
     background: var(--bg-tertiary);
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     margin-bottom: 0.75rem;
+    gap: 1rem;
 }
 
 .version-item:last-child {
@@ -339,13 +350,14 @@ h2 {
 
 .version-number {
     display: inline-block;
-    background: var(--accent-color);
-    color: white;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     font-size: 0.85rem;
     font-weight: 600;
     margin-right: 0.75rem;
+    border: 1px solid var(--border-color);
 }
 
 .upload-date {

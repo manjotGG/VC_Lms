@@ -40,3 +40,10 @@ dist/
 # Misc
 # ======================
 *.swp
+
+work.json
+
+error.txt
+final.json
+fix.json
+ui_update.json

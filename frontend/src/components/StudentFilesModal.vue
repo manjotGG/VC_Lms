@@ -6,7 +6,7 @@
                     <h3>{{ student.student_name }}</h3>
                     <p class="urn">{{ student.student_urn }}</p>
                 </div>
-                <button class="close-btn" @click="$emit('close')">✕</button>
+                <button class="close-btn" @click="$emit('close')">Close</button>
             </div>
             
             <div class="modal-content">
@@ -34,7 +34,7 @@
                             @click="downloadFile(file.filename)"
                             :disabled="downloading"
                         >
-                            ⬇ Download Latest
+                            Download Latest
                         </button>
                     </div>
                 </div>
@@ -96,7 +96,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,9 +116,9 @@ export default {
 .modal {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
@@ -137,7 +137,7 @@ export default {
 }
 
 .modal-header {
-    padding: 1.5rem;
+    padding: 2rem;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -148,6 +148,9 @@ export default {
     margin: 0;
     margin-bottom: 0.5rem;
     text-transform: capitalize;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.3rem;
 }
 
 .urn {
@@ -158,28 +161,31 @@ export default {
 }
 
 .close-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.9rem;
     cursor: pointer;
-    padding: 0;
-    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 0.4rem;
+    transition: border-color 0.2s ease;
+    font-weight: 600;
 }
 
 .close-btn:hover {
-    color: var(--text-primary);
+    border-color: var(--accent-color);
 }
 
 .modal-content {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem;
+    padding: 2rem;
 }
 
 .loading, .empty {
     text-align: center;
     padding: 2rem 0;
+    color: var(--text-secondary);
 }
 
 .files-list {
@@ -191,12 +197,17 @@ export default {
 .file-item {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 1rem;
+    border-radius: 0.4rem;
+    padding: 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.file-item:hover {
+    border-color: var(--accent-color);
 }
 
 .file-info {
@@ -207,6 +218,8 @@ export default {
     margin: 0;
     margin-bottom: 0.25rem;
     word-break: break-word;
+    color: var(--text-primary);
+    font-weight: 700;
 }
 
 .version-count {
@@ -219,3 +232,4 @@ export default {
     white-space: nowrap;
 }
 </style>
+

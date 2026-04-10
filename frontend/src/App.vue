@@ -4,17 +4,22 @@
         
         <div v-if="!user" class="auth-container">
             <div v-if="!authStep" class="role-selection">
-                <div class="logo">LMS</div>
-                <h1>Choose your role</h1>
-                <div class="role-buttons">
-                    <button class="btn btn-primary role-btn" @click="selectRole('admin')">
-                        <span class="role-icon">👨‍💼</span>
-                        Administrator
-                    </button>
-                    <button class="btn btn-secondary role-btn" @click="selectRole('student')">
-                        <span class="role-icon">👨‍🎓</span>
-                        Student
-                    </button>
+                <div class="backdrop"></div>
+                <div class="content">
+                    <div class="logo">VC LMS</div>
+                    <h1>Select your Environment</h1>
+                    <p class="subtitle">Access the Version Control Learning Management System</p>
+                    
+                    <div class="role-buttons">
+                        <button class="role-card" @click="selectRole('admin')">
+                            <div class="role-title">Administrator</div>
+                            <div class="role-description">Full system access and control</div>
+                        </button>
+                        <button class="role-card" @click="selectRole('student')">
+                            <div class="role-title">Student</div>
+                            <div class="role-description">View and manage submissions</div>
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -24,7 +29,7 @@
         
         <div v-else class="main-container">
             <AdminDashboard v-if="user.role === 'admin'" :token="token" @logout="logout" />
-            <StudentDashboard v-else :token="token" @logout="logout" />
+            <StudentDashboard v-else-if="user.role === 'student'" :token="token" @logout="logout" />
         </div>
     </div>
 </template>
@@ -33,8 +38,8 @@
 import { ref, onMounted } from 'vue'
 import api from './services/api'
 import AdminLogin from './views/AdminLogin.vue'
-import StudentLogin from './views/StudentLogin.vue'
 import AdminDashboard from './views/AdminDashboard.vue'
+import StudentLogin from './views/StudentLogin.vue'
 import StudentDashboard from './views/StudentDashboard.vue'
 import Toast from './components/Toast.vue'
 
@@ -42,8 +47,8 @@ export default {
     name: 'App',
     components: {
         AdminLogin,
-        StudentLogin,
         AdminDashboard,
+        StudentLogin,
         StudentDashboard,
         Toast
     },
@@ -54,7 +59,6 @@ export default {
         const toasts = ref([])
         
         onMounted(() => {
-            // Check if token exists in localStorage
             const savedToken = localStorage.getItem('token')
             if (savedToken) {
                 verifyToken(savedToken)
@@ -78,22 +82,22 @@ export default {
                 user.value = { role: response.data.role }
                 localStorage.setItem('token', token.value)
                 authStep.value = null
-                showToast('Logged in successfully!', 'success')
+                showToast('Logged in successfully', 'success')
             } catch (error) {
                 showToast('Login failed: Invalid credentials', 'error')
             }
         }
-        
-        const handleStudentLogin = async (student_name, student_urn) => {
+
+        const handleStudentLogin = async (studentName) => {
             try {
-                const response = await api.studentLogin(student_name, student_urn)
+                const response = await api.studentLogin(studentName, studentName)
                 token.value = response.data.access_token
-                user.value = { role: response.data.role, student_name, student_urn }
+                user.value = { role: 'student', studentId: studentName }
                 localStorage.setItem('token', token.value)
                 authStep.value = null
-                showToast('Logged in successfully!', 'success')
+                showToast('Logged in successfully', 'success')
             } catch (error) {
-                showToast('Login failed: Please check your details', 'error')
+                showToast('Login failed: Invalid student name or URN', 'error')
             }
         }
         
@@ -142,50 +146,89 @@ export default {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    position: relative;
+    background: var(--bg-primary);
+}
+
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
 }
 
 .role-selection {
     text-align: center;
-    max-width: 400px;
+    max-width: 900px;
     width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.content {
+    padding: 2rem;
 }
 
 .logo {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
     letter-spacing: 2px;
 }
 
 .role-selection h1 {
-    font-size: 2rem;
-    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
     color: var(--text-primary);
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 3rem;
 }
 
 .role-buttons {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.role-btn {
-    padding: 1.5rem;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
+    gap: 2rem;
     justify-content: center;
-    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-.role-icon {
+.role-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    flex: 1;
+    min-width: 280px;
+    max-width: 350px;
+}
+
+.role-card:hover {
+    border-color: var(--accent-color);
+}
+
+.role-title {
     font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.role-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
 }
 
 .main-container {
     min-height: 100vh;
+    background: var(--bg-primary);
 }
 </style>

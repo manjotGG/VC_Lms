@@ -1,9 +1,14 @@
 <template>
     <div class="login-container">
+        <div class="backdrop"></div>
+        
         <div class="login-card">
-            <button class="back-btn" @click="$emit('back')">← Back</button>
+            <button class="back-btn" @click="$emit('back')">Back</button>
             
-            <h2>Admin Login</h2>
+            <div class="header">
+                <h2>VC LMS</h2>
+                <p class="subtitle">Admin Portal Access</p>
+            </div>
             
             <form @submit.prevent="handleLogin">
                 <div class="form-group">
@@ -11,7 +16,7 @@
                     <input 
                         v-model="username" 
                         type="text" 
-                        placeholder="Enter username"
+                        placeholder="Enter your username"
                         required
                     >
                 </div>
@@ -21,17 +26,17 @@
                     <input 
                         v-model="password" 
                         type="password" 
-                        placeholder="Enter password"
+                        placeholder="Enter your password"
                         required
                     >
                 </div>
                 
                 <button 
                     type="submit" 
-                    class="btn btn-primary"
+                    class="btn btn-primary btn-login"
                     :disabled="loading"
                 >
-                    {{ loading ? 'Logging in...' : 'Login' }}
+                    {{ loading ? 'Authenticating...' : 'Access System' }}
                 </button>
             </form>
         </div>
@@ -75,58 +80,112 @@ export default {
     align-items: center;
     min-height: 100vh;
     padding: 2rem;
+    position: relative;
+    background: var(--bg-primary);
+}
+
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
 }
 
 .login-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    padding: 2.5rem;
+    border-radius: 0.5rem;
+    padding: 4rem 3.5rem;
     width: 100%;
-    max-width: 400px;
+    max-width: 650px;
     position: relative;
+    z-index: 1;
+    transition: border-color 0.3s ease;
+}
+
+.login-card:hover {
+    border-color: var(--accent-color);
 }
 
 .back-btn {
     position: absolute;
     top: 1.5rem;
     left: 1.5rem;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.4rem;
+    transition: border-color 0.2s ease;
+    font-weight: 600;
 }
 
 .back-btn:hover {
-    color: var(--text-primary);
+    border-color: var(--accent-color);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
 }
 
 h2 {
-    font-size: 1.75rem;
-    margin-bottom: 2rem;
-    text-align: center;
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: 1rem;
+    color: var(--text-primary);
+    letter-spacing: 0.3px;
 }
 
 input {
     width: 100%;
+    padding: 1rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 0.4rem;
+    font-size: 1.05rem;
+    transition: border-color 0.2s ease;
 }
 
-.btn {
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: var(--bg-tertiary);
+}
+
+input::placeholder {
+    color: var(--text-secondary);
+}
+
+.btn-login {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    padding: 1.1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
 }
 </style>

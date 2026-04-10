@@ -21,11 +21,11 @@ export default {
     computed: {
         icon() {
             const icons = {
-                success: '✓',
-                error: '✕',
-                info: 'ℹ'
+                success: '[OK]',
+                error: '[ERR]',
+                info: '[i]'
             }
-            return icons[this.type] || '•'
+            return icons[this.type] || '[*]'
         }
     }
 }
@@ -36,20 +36,20 @@ export default {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.75rem;
     border-radius: 0.5rem;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     animation: slideIn 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     z-index: 9999;
+    font-weight: 600;
 }
 
 .toast.success {
-    border-left: 4px solid var(--success);
+    border-left: 3px solid var(--success);
 }
 
 .toast.success .icon {
@@ -57,20 +57,27 @@ export default {
 }
 
 .toast.error {
-    border-left: 4px solid var(--error);
+    border-left: 3px solid var(--error);
 }
 
 .toast.error .icon {
     color: var(--error);
 }
 
+.toast.info .icon {
+    color: var(--text-primary);
+}
+
 .icon {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    min-width: 40px;
+    text-align: center;
 }
 
 .message {
     font-size: 0.95rem;
+    color: var(--text-primary);
 }
 
 @keyframes slideIn {

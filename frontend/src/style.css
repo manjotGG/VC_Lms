@@ -1,16 +1,16 @@
-/* Dark Premium Theme */
+/* Minimal Black-White Theme */
 :root {
-    --bg-primary: #020617;
-    --bg-secondary: #0f172a;
-    --bg-tertiary: #1e293b;
-    --border-color: #334155;
-    --text-primary: #e2e8f0;
-    --text-secondary: #cbd5e1;
-    --accent-color: #6366f1;
-    --accent-hover: #818cf8;
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
+    --bg-primary: #000000;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1a1a1a;
+    --border-color: #222222;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --accent-color: #ffffff;
+    --accent-hover: #f0f0f0;
+    --success: #ffffff;
+    --error: #ff0000;
+    --warning: #ffaa00;
 }
 
 * {
@@ -44,36 +44,50 @@ body {
 .text-error { color: var(--error); }
 .text-success { color: var(--success); }
 
+/* Cards */
+.glass-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    transition: border-color 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--accent-color);
+}
+
 /* Buttons */
 .btn {
     padding: 0.75rem 1.5rem;
-    border: none;
+    border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-weight: 600;
 }
 
 .btn-primary {
     background: var(--accent-color);
-    color: white;
+    color: #000;
+    border: 1px solid var(--accent-color);
 }
 
 .btn-primary:hover {
     background: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    border-color: var(--accent-hover);
 }
 
 .btn-secondary {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
 }
 
 .btn-secondary:hover {
-    background: var(--border-color);
+    background: var(--bg-secondary);
+    border-color: var(--accent-hover);
 }
 
 .btn-sm {
@@ -90,14 +104,13 @@ body {
 .card {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
 .card:hover {
     border-color: var(--accent-color);
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
 }
 
 /* Inputs */
@@ -105,16 +118,16 @@ input, textarea, select {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease;
 }
 
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: var(--bg-tertiary);
 }
 
 input::placeholder, textarea::placeholder {
@@ -123,11 +136,11 @@ input::placeholder, textarea::placeholder {
 
 /* Loading Spinner */
 .spinner {
-    border: 3px solid var(--bg-tertiary);
+    border: 3px solid var(--border-color);
     border-top: 3px solid var(--accent-color);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     animation: spin 1s linear infinite;
     margin: 1rem auto;
 }
@@ -140,9 +153,9 @@ input::placeholder, textarea::placeholder {
 /* Toast Notifications */
 .toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 1rem 1.5rem;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1.25rem 1.75rem;
     border-radius: 0.5rem;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -151,11 +164,11 @@ input::placeholder, textarea::placeholder {
 }
 
 .toast.success {
-    border-left: 4px solid var(--success);
+    border-color: var(--success);
 }
 
 .toast.error {
-    border-left: 4px solid var(--error);
+    border-color: var(--error);
 }
 
 @keyframes slideIn {
@@ -171,19 +184,44 @@ input::placeholder, textarea::placeholder {
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--border-color);
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-color);
+}
+
+/* Text Utilities */
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+.text-secondary { color: var(--text-secondary); }
+.text-error { color: var(--error); }
+.text-success { color: var(--success); }
+
+/* Focus States */
+button:focus, input:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Smooth Transitions */
+* {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
