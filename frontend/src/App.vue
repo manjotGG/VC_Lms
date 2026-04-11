@@ -88,11 +88,11 @@ export default {
             }
         }
 
-        const handleStudentLogin = async (studentName) => {
+        const handleStudentLogin = async (studentName, studentUrn) => {
             try {
-                const response = await api.studentLogin(studentName, studentName)
+                const response = await api.studentLogin(studentName, studentUrn)
                 token.value = response.data.access_token
-                user.value = { role: 'student', studentId: studentName }
+                user.value = { role: 'student', studentId: studentName, studentUrn }
                 localStorage.setItem('token', token.value)
                 authStep.value = null
                 showToast('Logged in successfully', 'success')

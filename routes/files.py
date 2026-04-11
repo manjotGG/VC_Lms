@@ -482,3 +482,29 @@ def summary(db: Session = Depends(get_db)):
         "total_students": len(data),
         "students": data
     }
+
+
+@router.get("/admin/recent")
+def get_recent_uploads(db: Session = Depends(get_db)):
+    """Get recent file uploads with latest first"""
+    # Get all files sorted by upload date (latest first)
+    files = db.query(models.File).order_by(
+        models.File.uploaded_at.desc()
+    ).limit(10).all()
+    
+    if not files:
+        return {"files": []}
+    
+    result = []
+    for f in files:
+        result.append({
+            "id": f.id,
+            "filename": f.filename,
+            "version": f.version,
+            "student_name": f.student_name,
+            "student_urn": f.student_urn,
+            "comment": f.comment,
+            "uploaded_at": f.uploaded_at
+        })
+    
+    return {"files": result}

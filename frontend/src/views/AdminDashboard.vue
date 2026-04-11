@@ -27,6 +27,32 @@
                     >
                 </div>
             </div>
+
+            <div class="recent-section">
+                <div class="recent-header">
+                    <h3>Recent File Uploads</h3>
+                    <button class="btn btn-secondary btn-sm" @click="loadRecentUploads">Refresh</button>
+                </div>
+                
+                <div v-if="loadingRecent" class="loading">
+                    <div class="spinner"></div>
+                </div>
+                
+                <div v-else-if="recentUploads.length === 0" class="empty-recent">
+                    <p>No recent uploads</p>
+                </div>
+                
+                <div v-else class="recent-list">
+                    <div v-for="item in recentUploads" :key="item.id" class="recent-item">
+                        <div class="recent-content">
+                            <div class="recent-title">{{ item.student_name }} - {{ item.filename }}</div>
+                            <div class="recent-urn">{{ item.student_urn }} (v{{ item.version }})</div>
+                            <div v-if="item.comment" class="recent-comment">{{ item.comment }}</div>
+                            <div class="recent-time">{{ formatDate(item.uploaded_at) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div v-if="loading" class="loading">
                 <div class="spinner"></div>
@@ -39,7 +65,7 @@
             
             <div v-else-if="students.length > 0">
                 <div class="uploads-section">
-                    <h3>Recent Uploads</h3>
+                    <h3>Search Results</h3>
                     <div class="uploads-table">
                         <div class="table-header">
                             <div class="col-name">Student Name</div>
@@ -95,7 +121,28 @@ export default {
         const loading = ref(false)
         const searched = ref(false)
         const selectedStudent = ref(null)
+        const recentUploads = ref([])
+        const loadingRecent = ref(false)
         let searchTimeout
+        
+        const loadRecentUploads = async () => {
+            loadingRecent.value = true
+            try {
+                const response = await api.getRecentUploads()
+                recentUploads.value = response.data.files || []
+            } catch (error) {
+                console.error('Failed to load recent uploads', error)
+                recentUploads.value = []
+            } finally {
+                loadingRecent.value = false
+            }
+        }
+        
+        const formatDate = (dateString) => {
+            if (!dateString) return ''
+            const date = new Date(dateString)
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
         
         const performSearch = async () => {
             if (!searchName.value && !searchUrn.value) {
@@ -151,9 +198,13 @@ export default {
             loading,
             searched,
             selectedStudent,
+            recentUploads,
+            loadingRecent,
             debouncedSearch,
             selectStudent,
-            handleDownload
+            handleDownload,
+            loadRecentUploads,
+            formatDate
         }
     }
 }
@@ -229,6 +280,81 @@ export default {
 .loading, .empty {
     text-align: center;
     padding: 3rem 0;
+    color: var(--text-secondary);
+}
+
+.recent-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.recent-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recent-item {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.4rem;
+    padding: 1.25rem;
+    transition: border-color 0.2s ease;
+}
+
+.recent-item:hover {
+    border-color: var(--accent-color);
+}
+
+.recent-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recent-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.recent-urn {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.recent-comment {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.recent-time {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.empty-recent {
+    text-align: center;
+    padding: 2rem 0;
     color: var(--text-secondary);
 }
 

@@ -12,11 +12,21 @@
             
             <form @submit.prevent="handleLogin">
                 <div class="form-group">
-                    <label>Student Name or URN</label>
+                    <label>Student Name</label>
                     <input 
                         v-model="studentName" 
                         type="text" 
-                        placeholder="Enter your name or URN"
+                        placeholder="Enter your full name"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label>Student URN</label>
+                    <input 
+                        v-model="studentUrn" 
+                        type="text" 
+                        placeholder="Enter your URN (e.g., S12345)"
                         required
                     >
                 </div>
@@ -41,12 +51,13 @@ export default {
     emits: ['login', 'back'],
     setup(props, { emit }) {
         const studentName = ref('')
+        const studentUrn = ref('')
         const loading = ref(false)
         
         const handleLogin = async () => {
             loading.value = true
             try {
-                emit('login', studentName.value)
+                emit('login', studentName.value, studentUrn.value)
             } finally {
                 loading.value = false
             }
@@ -54,6 +65,7 @@ export default {
         
         return {
             studentName,
+            studentUrn,
             loading,
             handleLogin
         }
@@ -85,9 +97,9 @@ export default {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
-    padding: 3rem;
+    padding: 4rem 3.5rem;
     width: 100%;
-    max-width: 550px;
+    max-width: 650px;
     position: relative;
     z-index: 1;
     transition: border-color 0.3s ease;

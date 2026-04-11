@@ -65,5 +65,8 @@ export default {
         api.get('/files/admin/download', {
             params: { student_urn, filename },
             responseType: 'blob'
-        })
+        }),
+    
+    getRecentUploads: () => 
+        api.get('/files/admin/recent')
 }
